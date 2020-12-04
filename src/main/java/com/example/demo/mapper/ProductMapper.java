@@ -1,6 +1,7 @@
 package com.example.demo.mapper;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.example.demo.model.Product;
 
@@ -12,4 +13,9 @@ public interface ProductMapper {
 
 	@Select("select * from product")
 	public List<Product> findAll();
+
+	public Optional<Product> findById(int productId);
+
+	public void update(Product product);
+
 }

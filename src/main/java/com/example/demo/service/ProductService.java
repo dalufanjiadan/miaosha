@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.example.demo.mapper.ProductMapper;
 import com.example.demo.model.Product;
@@ -16,6 +17,16 @@ public class ProductService {
 
 	public List<Product> getProducts() {
 		return productMapper.findAll();
+	}
+
+	public Optional<Product> getProductById(int productId) {
+
+		return productMapper.findById(productId);
+	}
+
+	public void updateProduct(Product product) {
+
+		productMapper.update(product);
 	}
 
 }
