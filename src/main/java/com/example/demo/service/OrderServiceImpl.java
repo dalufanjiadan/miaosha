@@ -22,6 +22,11 @@ public class OrderServiceImpl implements OrderService {
 	@Autowired
 	private OrderMapper orderMapper;
 
+	/**
+	 * 超卖测试
+	 * 
+	 * 生成订单
+	 */
 	@Override
 	public Order createOrder(OrderRequest orderRequest) {
 
@@ -33,7 +38,14 @@ public class OrderServiceImpl implements OrderService {
 		return createOrder(product);
 	}
 
-	// 检查库存
+	/**
+	 * 检查库存
+	 * 
+	 * @param productId 产品id
+	 * @return Product
+	 * @exception RuntimeException 库存不足异常
+	 * @exception RuntimeException 错误productId异常
+	 */
 	private Product checkCount(int productId) {
 
 		Optional<Product> product = productService.getProductById(productId);
@@ -41,9 +53,11 @@ public class OrderServiceImpl implements OrderService {
 			Product p = product.get();
 			if (p.getSale() >= p.getCount()) {
 				// 库存不足异常
+				throw new RuntimeException(productId + "库存不足");
 			}
 		} else {
 			// 找不到product异常
+			throw new RuntimeException(productId + "产品ID错误");
 		}
 		return product.get();
 	}
