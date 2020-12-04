@@ -1,0 +1,11 @@
+server:
+    port: 8000
+
+spring:
+    application:
+        name: miaosha-demo
+
+    datasource:
+        username: root
+        password: 123456
+        url: jdbc:mysql://127.0.0.1:3306/test
