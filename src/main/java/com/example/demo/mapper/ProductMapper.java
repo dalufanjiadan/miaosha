@@ -16,6 +16,8 @@ public interface ProductMapper {
 
 	public Optional<Product> findById(int productId);
 
-	public void update(Product product);
+	public int update(Product product);
+
+	public int updateByPessimisticLock(Product product);
 
 }

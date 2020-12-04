@@ -73,8 +73,12 @@ public class OrderServiceImpl implements OrderService {
 	// 更新库存
 	private void updateCount(Product product) {
 
-		product.setSale(product.getSale() + 1);
-		productService.updateProduct(product);
+		int rowAffected = productService.updateByPessimisticLock(product);
+
+		if (rowAffected == 0) {
+			throw new RuntimeException("并发更新失败，乐观锁version不匹配");
+		}
+
 	}
 
 	public Order createOrder(Product product) {

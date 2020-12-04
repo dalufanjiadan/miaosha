@@ -24,9 +24,14 @@ public class ProductService {
 		return productMapper.findById(productId);
 	}
 
-	public void updateProduct(Product product) {
+	public int update(Product product) {
 
-		productMapper.update(product);
+		return productMapper.update(product);
+	}
+
+	public int updateByPessimisticLock(Product product) {
+
+		return productMapper.updateByPessimisticLock(product);
 	}
 
 }

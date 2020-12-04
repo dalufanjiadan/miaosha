@@ -41,4 +41,23 @@
 			id = #{id}
 	</update>
 
+	<update id="updateByPessimisticLock" parameterType="com.example.demo.model.Product">
+		UPDATE
+			miaosha.product 
+		<set >
+			<if test="name != null">
+				name = #{name},
+			</if>
+			<if test="count != null">
+				count = #{count},
+			</if>
+			<if test="sale != null">
+				sale = sale + 1,
+			</if>
+		</set>
+		WHERE
+			id = #{id}
+			AND sale = #{sale}
+	</update>
+
 </mapper>
