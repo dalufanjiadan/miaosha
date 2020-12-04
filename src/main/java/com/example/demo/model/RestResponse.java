@@ -60,6 +60,12 @@ public class RestResponse<T> {
 		response.setStatus(Status.BAD_REQUEST);
 		return response;
 	}
+	public static <T> RestResponse<T> badRequest(String message) {
+		RestResponse<T> response = new RestResponse<>();
+		response.setStatus(Status.BAD_REQUEST);
+		response.setMessage(message);
+		return response;
+	}
 
 	public static <T> RestResponse<T> unauthorized() {
 		RestResponse<T> response = new RestResponse<>();

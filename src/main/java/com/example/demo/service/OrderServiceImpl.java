@@ -10,10 +10,14 @@ import com.example.demo.payload.OrderRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import lombok.extern.slf4j.Slf4j;
+
 /**
+ * 
  * OrderServiceImpl
  */
 @Service
+@Slf4j
 public class OrderServiceImpl implements OrderService {
 
 	@Autowired
@@ -53,11 +57,15 @@ public class OrderServiceImpl implements OrderService {
 			Product p = product.get();
 			if (p.getSale() >= p.getCount()) {
 				// 库存不足异常
-				throw new RuntimeException(productId + "库存不足");
+				String msg = productId + "库存不足";
+				// log.error(msg);
+				throw new RuntimeException(msg);
 			}
 		} else {
 			// 找不到product异常
-			throw new RuntimeException(productId + "产品ID错误");
+			String msg = productId + "产品ID错误";
+			// log.error(msg);
+			throw new RuntimeException(msg);
 		}
 		return product.get();
 	}
@@ -76,6 +84,8 @@ public class OrderServiceImpl implements OrderService {
 
 		orderMapper.insert(order);
 
+		String msg = "生成订单：" + order.toString();
+		log.info(msg);
 		return order;
 	}
 
