@@ -11,6 +11,9 @@ import com.google.common.util.concurrent.RateLimiter;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import cn.hutool.core.util.RandomUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -38,22 +41,26 @@ public class OrderServiceImpl implements OrderService {
 	 * 生成订单
 	 */
 	@Override
+	// @Transactional(rollbackFor = Exception.class, propagation =
+	// Propagation.REQUIRED,isolation = Isolation.SERIALIZABLE)
 	public Order createOrder(OrderRequest orderRequest) {
 
 		// 阻塞式获取令牌
 		// log.info("等待时间" + rateLimiter.acquire());
 		// 非阻塞式获取令牌
-		if (!rateLimiter.tryAcquire(1000 + RandomUtil.randomInt(1000, 10000), TimeUnit.MILLISECONDS)) {
-			log.warn("限流了，直接返回失败");
-			throw new RuntimeException("购买失败，库存不足");
-		}
+		// if (!rateLimiter.tryAcquire(1000 + RandomUtil.randomInt(1000, 10000), TimeUnit.MILLISECONDS)) {
+		// 	log.warn("限流了，直接返回失败");
+		// 	throw new RuntimeException("购买失败，库存不足");
+		// }
 
-		// 检查库存
-		Product product = checkCount(orderRequest.getProductId());
-		// 库存减一
-		updateCount(product);
-		// 生成订单
-		return createOrder(product);
+		synchronized (this) {
+			// 检查库存
+			Product product = checkCount(orderRequest.getProductId());
+			// 库存减一
+			updateCount(product);
+			// 生成订单
+			return createOrder(product);
+		}
 	}
 
 	/**
