@@ -19,7 +19,7 @@ public class OrderController {
 	private OrderService orderService;
 
 	@PostMapping
-	public RestResponse<Order> createOrder(@RequestBody OrderRequest orderRequest) {
+	public RestResponse<Object> createOrder(@RequestBody OrderRequest orderRequest) {
 
 		return RestResponse.ok(orderService.createOrder(orderRequest));
 	}
