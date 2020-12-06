@@ -10,5 +10,10 @@ spring:
         password: 123456
         url: jdbc:mysql://127.0.0.1:3306/miaosha
 
+    redis:
+        host: 127.0.0.1
+        port: 6379
+        database: 0
+
 mybatis:
     mapperLocations: classpath:mapper/**/*.xml
