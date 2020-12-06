@@ -14,4 +14,6 @@ public class OrderRequest {
 	@JsonProperty("product_id")
 	private Integer productId;
 
+	@JsonProperty("user_id")
+	private Integer userId;
 }
