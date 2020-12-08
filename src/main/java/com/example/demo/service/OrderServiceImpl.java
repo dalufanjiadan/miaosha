@@ -51,9 +51,9 @@ public class OrderServiceImpl implements OrderService {
 	public void createOrder(OrderRequest orderRequest) {
 		try {
 			// 创建订单前的必要条件合法性检查
-			// for (int i = 0; i < orderCheckChain.size(); i++) {
-			// orderCheckChain.get(i).check(orderRequest);
-			// }
+			for (int i = 0; i < orderCheckChain.size(); i++) {
+				orderCheckChain.get(i).check(orderRequest);
+			}
 
 			// 检查库存
 			Product product = checkCount(orderRequest.getProductId());
