@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import cn.hutool.core.util.IdUtil;
+
 @RestController
 @RequestMapping("/orders")
 public class OrderController {
@@ -20,11 +22,13 @@ public class OrderController {
 
 	@PostMapping
 	public RestResponse<Object> createOrder(@RequestBody OrderRequest orderRequest) {
-		// 参数校验
-		// todo
-
+		
+		// 生成订单处理编号、前端用此编号轮询订单处理状态
+		String simpleUUID = IdUtil.simpleUUID();
+		orderRequest.setOrderHandleId(simpleUUID);
 		orderProducer.produce(orderRequest);
-		return null;
+
+		return RestResponse.ok(simpleUUID);
 	}
 
 }

@@ -27,7 +27,7 @@ public class FrequencyCheck implements OrderCheck {
 
 		Object value = redisUtil.get(limitKey);
 		if (value != null) {
-			if ((int) value > 10) {
+			if ((int) value > 1000) {
 				throw new RuntimeException("购买失败，超过频率限制");
 			}
 			redisUtil.incr(limitKey, 1);

@@ -16,9 +16,9 @@ public class RestExceptionHandler {
 
 		log.error(e.getMessage());
 		StackTraceElement[] stackTrace = e.getStackTrace();
-		for (int i = 0; i < stackTrace.length; i++) {
-			System.out.println(stackTrace[i].toString());
-		}
+		// for (int i = 0; i < stackTrace.length; i++) {
+		// 	System.out.println(stackTrace[i].toString());
+		// }
 
 		return RestResponse.badRequest(e.getMessage());
 	}

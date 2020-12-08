@@ -34,3 +34,21 @@ CREATE TABLE `order` (
 	`deleted_at` datetime(6) DEFAULT NULL,
 	PRIMARY KEY (`id`)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8;
+
+-- ----------------------------
+-- Table structure for user
+-- ----------------------------
+CREATE TABLE `user` (
+	`id` int NOT NULL AUTO_INCREMENT,
+	`name` VARCHAR(255) NOT NULL,
+	`created_at` datetime(6) DEFAULT CURRENT_TIMESTAMP(6),
+	`updated_at` datetime(6) DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
+	`deleted_at` datetime(6) DEFAULT NULL,
+	PRIMARY KEY (`id`)
+) ENGINE = InnoDB DEFAULT CHARSET = utf8;
+
+INSERT INTO
+	`user` (`id`, `name`)
+VALUES
+	('1', '张三'),
+	('2', '李四');

@@ -42,36 +42,32 @@ public class OrderServiceImpl implements OrderService {
 	@Autowired
 	private List<OrderCheck> orderCheckChain;
 
-	// 每秒放行10个请求
-	RateLimiter rateLimiter = RateLimiter.create(10);
-
 	/**
 	 * 生成订单
 	 */
 	@Override
 	// @Transactional(rollbackFor = Exception.class, propagation =
 	// Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
-	public Order createOrder(OrderRequest orderRequest) {
+	public void createOrder(OrderRequest orderRequest) {
+		try {
+			// 创建订单前的必要条件合法性检查
+			// for (int i = 0; i < orderCheckChain.size(); i++) {
+			// orderCheckChain.get(i).check(orderRequest);
+			// }
 
-		// 创建订单前的合法性检查
-		for (int i = 0; i < orderCheckChain.size(); i++) {
-			orderCheckChain.get(i).check(orderRequest);
+			// 检查库存
+			Product product = checkCount(orderRequest.getProductId());
+			// 库存减一
+			updateCount(product);
+			// 生成订单
+			Order order = createOrder(product);
+			// 处理结果放一份到缓存
+			redisUtil.set("OrderResult::" + orderRequest.getOrderHandleId(), order);
+		} catch (Exception e) {
+			log.error(orderRequest.toString() + e.getMessage());
+			redisUtil.set("OrderResult::" + orderRequest.getOrderHandleId(), e.getMessage());
 		}
 
-		// 阻塞式获取令牌
-		// log.info("等待时间" + rateLimiter.acquire());
-		// 非阻塞式获取令牌
-		if (!rateLimiter.tryAcquire(1000 + RandomUtil.randomInt(1000, 10000), TimeUnit.MILLISECONDS)) {
-			log.warn("限流了，直接返回失败");
-			throw new RuntimeException("购买失败，库存不足");
-		}
-
-		// 检查库存
-		Product product = checkCount(orderRequest.getProductId());
-		// 库存减一
-		updateCount(product);
-		// 生成订单
-		return createOrder(product);
 	}
 
 	/**
@@ -84,11 +80,8 @@ public class OrderServiceImpl implements OrderService {
 	private Product checkCount(int productId) {
 
 		Product product = productService.getProductById(productId).get();
-
 		if (product.getSale() >= product.getCount()) {
-			// 库存不足异常
 			String msg = productId + "库存不足";
-			// log.error(msg);
 			throw new RuntimeException(msg);
 		}
 
@@ -103,18 +96,16 @@ public class OrderServiceImpl implements OrderService {
 		if (rowAffected == 0) {
 			throw new RuntimeException("并发更新失败，乐观锁version不匹配");
 		}
-
 	}
 
 	public Order createOrder(Product product) {
 
 		Order order = new Order();
 		order.setProductId(product.getId());
-
 		orderMapper.insert(order);
-
 		String msg = "生成订单：" + order.toString();
 		log.info(msg);
+
 		return order;
 	}
 

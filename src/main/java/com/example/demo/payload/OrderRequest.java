@@ -11,6 +11,8 @@ import lombok.NoArgsConstructor;
 @Data
 public class OrderRequest {
 
+	private String orderHandleId;
+
 	@JsonProperty("product_id")
 	private Integer productId;
 
