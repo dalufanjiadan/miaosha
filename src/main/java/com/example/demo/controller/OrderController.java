@@ -1,5 +1,7 @@
 package com.example.demo.controller;
 
+import javax.validation.Valid;
+
 import com.example.demo.model.RestResponse;
 import com.example.demo.payload.OrderRequest;
 import com.example.demo.rabbitmq.OrderProducer;
@@ -21,7 +23,7 @@ public class OrderController {
 
 
 	@PostMapping
-	public RestResponse<Object> createOrder(@RequestBody OrderRequest orderRequest) {
+	public RestResponse<Object> createOrder(@Valid @RequestBody OrderRequest orderRequest) {
 		
 		// 生成订单处理编号、前端用此编号轮询订单处理状态
 		String simpleUUID = IdUtil.simpleUUID();

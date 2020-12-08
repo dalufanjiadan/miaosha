@@ -4,7 +4,6 @@ import java.util.concurrent.TimeUnit;
 
 import com.example.demo.payload.OrderRequest;
 import com.example.demo.service.OrderService;
-import com.example.demo.util.RedisUtil;
 import com.google.common.util.concurrent.RateLimiter;
 
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -20,9 +19,6 @@ public class OrderConsumer {
 
     @Autowired
     private OrderService orderService;
-
-    @Autowired
-    private RedisUtil redisUtil;
 
     // 每秒10个令牌
     RateLimiter rateLimiter = RateLimiter.create(100);
