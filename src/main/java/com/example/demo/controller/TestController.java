@@ -17,6 +17,7 @@ public class TestController {
 	@GetMapping("/hello")
 	public void hello() {
 
+		System.out.println("hello world");
 		System.out.println(testMapper.findAll());
 	}
 }
